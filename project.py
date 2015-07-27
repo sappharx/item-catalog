@@ -41,3 +41,19 @@ def categoriesJSON():
     categories = session.query(Category).all()
     return jsonify(categories=[r.serialize for r in categories])
 
+
+################################################################################
+
+# Web page APIs to display application content =================================
+
+# show all categories
+@app.route('/')
+@app.route('/category/')
+def showCategories():
+    categories = session.query(Category).order_by(asc(Category.name))
+    if 'username' not in login_session:
+        return render_template('publiccategories.html', categories=categories)
+    else:
+        return render_template('categories.html', categories=categories)
+
+################################################################################
